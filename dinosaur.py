@@ -71,6 +71,8 @@ class Dino(pygame.sprite.Sprite):
 # Variables
 
 game_speed = 5
+game_score = 0
+tick = 0
 
 # Surfaces
 
@@ -91,7 +93,7 @@ dino_group.add(dinosaur)
 while True:
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_DOWN]:
+    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
         dinosaur.duck()
     else:
         if dinosaur.ducking:
@@ -102,7 +104,7 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
+            if event.key == pygame.K_SPACE or event.key == pygame.K_UP or event.key == pygame.K_w:
                 dinosaur.jump()
 
     screen.fill("white")
@@ -111,11 +113,19 @@ while True:
     dino_group.draw(screen)
 
     game_speed += 0.0025
+    tick += 1
+    if tick % 12 == 0:
+        game_score += 1
 
     ground_x -= 1
 
+    scoretext = game_font.render('Score: ' + str(game_score), True, "black", "white")
+    scoretextRect = scoretext.get_rect()
+    scoretextRect.center = (1100,50)
+
     screen.blit(ground, (ground_x, 360))
     screen.blit(ground, (ground_x + 1280, 360))
+    screen.blit(scoretext,scoretextRect)
 
     if ground_x <= -1280:
         ground_x = 0
