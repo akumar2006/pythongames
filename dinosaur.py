@@ -37,6 +37,9 @@ class Dino(pygame.sprite.Sprite):
         self.gravity = 4.5
         self.ducking = False
 
+        self.jump_height = 50
+        self.jumping = False
+
     def update(self):
         self.animate()
         self.apply_gravity()
@@ -63,10 +66,28 @@ class Dino(pygame.sprite.Sprite):
         if self.rect.centery <= 360:
             self.rect.centery += self.gravity
 
-    def jump(self):
-        if self.rect.centery >= 360:
-            while self.rect.centery - self.velocity > 40:
-                self.rect.centery -= 1
+    # def jump(self):
+
+
+
+        # self.Jumping = True
+        # if self.Jumping:
+        #     if self.jump_count >= -10:
+        #         sign = 1
+        #     if self.jump_count <= 0:
+        #         sign = -1
+        #     self.y -= self.jump_count**2 * 0.1 * sign
+        #     self.jump_count -= 1
+        # else:
+        #     self.Jumping = False
+        #     self.jump_count = 10
+
+
+        # if self.rect.centery >= 360:
+        #     self.jumping = True
+        #     if self.jumping and self.rect.centery - self.velocity > 40:
+        #         self.rect.centery -= 1
+        #     else: self.jumping = False
 
 # Variables
 
@@ -104,9 +125,17 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE or event.key == pygame.K_UP or event.key == pygame.K_w:
-                dinosaur.jump()
-
+            if dinosaur.jumping == False and (event.key == pygame.K_SPACE or event.key == pygame.K_UP or event.key == pygame.K_w):
+                dinosaur.jumping = True
+                # dinosaur.jump()
+    if dinosaur.jumping:
+        if (dinosaur.jump_height > 0 and dinosaur.rect.centery >= 360):
+            # dinosaur.rect.centery -= (dinosaur.jump_height ** 2) * 0.05
+            dinosaur.rect.centery -= (dinosaur.jump_height * abs(dinosaur.jump_height)) * 0.1
+            dinosaur.jump_height -= 1
+        else:
+            dinosaur.jumping = False
+            dinosaur.jump_height = 50
     screen.fill("white")
 
     dino_group.update()
